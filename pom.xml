@@ -72,6 +72,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>dan-usuarios</finalName>
 	</build>
 
 </project>
