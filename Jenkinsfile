@@ -21,15 +21,15 @@ agent any
                 archiveArtifacts artifacts:'**/target/site/**'
             }
         }
-        stage('reportes'){
-            publishHTML([allowMissing:false,
-            alwaysLinkToLastBuild:true,
-            keepAll:true,
-            reportDir:'target/site',
-            reportFiles:'index.html',
-            reportName:'Site'
-            ])
-        }
+        // stage('reportes'){
+        //     publishHTML([allowMissing:false,
+        //     alwaysLinkToLastBuild:true,
+        //     keepAll:true,
+        //     reportDir:'target/site',
+        //     reportFiles:'index.html',
+        //     reportName:'Site'
+        //     ])
+        // }
     }
     options{
         buildDiscarder(logRotator(numToKeepStr:'5',artifactNumToKeepStr:'5'))
