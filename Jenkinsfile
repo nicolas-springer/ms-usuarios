@@ -3,6 +3,7 @@ agent any
     stages{
         stage('clean'){
             steps{
+                sh "chmod +x mvnw.sh"
                 sh "java -version"
                 sh "./mvnw clean"
             }
