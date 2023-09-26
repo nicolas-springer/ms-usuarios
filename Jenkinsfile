@@ -17,8 +17,8 @@ agent any
             steps{
                 bat"./mvnw clean install site-DskipTests"
                 //bat"./mvnw pmd:pmd"
-                archiveArtifactsartifacts:'**/target/*.jar',fingerprint:true
-                archiveArtifactsartifacts:'**/target/site/**'
+                archiveArtifacts artifacts:'**/target/*.jar',fingerprint:true
+                archiveArtifacts artifacts:'**/target/site/**'
             }
         }
         stage('reportes'){
