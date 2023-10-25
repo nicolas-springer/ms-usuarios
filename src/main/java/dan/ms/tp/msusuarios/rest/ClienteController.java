@@ -27,6 +27,7 @@ public class ClienteController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
+        System.out.println("Funiona by id ####################");
         if (id != null) {
             try {
                 return ResponseEntity.ok(clienteService.getClienteById(id));
@@ -96,5 +97,5 @@ public class ClienteController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
+
 }
