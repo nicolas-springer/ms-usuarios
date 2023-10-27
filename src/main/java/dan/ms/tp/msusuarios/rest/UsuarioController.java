@@ -22,7 +22,7 @@ import dan.ms.tp.msusuarios.service.UsuarioService;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService; // Debes inyectar el servicio de Usuario correspondiente
+    private UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
