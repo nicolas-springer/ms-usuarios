@@ -12,4 +12,5 @@ public interface ClienteService {
     void deleteClienteById(Integer id);
     Cliente updateClienteByCuit(String cuit, Cliente cliente);
     void deleteClienteByCuit(String cuit);
+    boolean hasGerente(Integer id);
 }

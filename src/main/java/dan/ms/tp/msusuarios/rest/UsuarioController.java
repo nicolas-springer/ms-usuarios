@@ -34,7 +34,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Usuario> getUsuarioById(@PathVariable Integer id) {
         if (id != null) {
             try {

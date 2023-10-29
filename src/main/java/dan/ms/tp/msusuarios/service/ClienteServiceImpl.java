@@ -1,5 +1,6 @@
 package dan.ms.tp.msusuarios.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dan.ms.tp.msusuarios.modelo.Cliente;
@@ -7,6 +8,9 @@ import java.util.List;
 
 @Service
 public class ClienteServiceImpl implements ClienteService{
+
+    @Autowired
+    UsuarioServiceImpl usuarioServiceImpl;
 
     @Override
     public List<Cliente> getAllClientes() {
@@ -54,6 +58,11 @@ public class ClienteServiceImpl implements ClienteService{
     public void deleteClienteByCuit(String cuit) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteClienteByCuit'");
+    }
+
+    @Override
+    public boolean hasGerente(Integer id) {
+        return usuarioServiceImpl.existeUsuarioGerenteParaCliente(id);
     }
     
 }

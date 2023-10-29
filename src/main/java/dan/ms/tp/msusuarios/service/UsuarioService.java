@@ -11,7 +11,8 @@ public interface UsuarioService {
     List<Usuario> getUsuariosByCliente(Integer idCliente);
     List<Usuario> getUsuariosByTipoUsuario(String tipoUsuario);
     Usuario createUsuario(Usuario usuario);
-    Object updateUsuarioById(Integer id, Usuario usuario);
+    Usuario updateUsuarioById(Integer id, Usuario usuario);
     void deleteUsuarioById(Integer id);
-    Object updateUsuario(Integer id, Usuario usuario);
+    boolean existeUsuarioGerenteParaCliente(Integer idCliente);
+
 }
