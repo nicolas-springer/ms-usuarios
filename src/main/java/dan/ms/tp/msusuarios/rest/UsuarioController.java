@@ -89,7 +89,7 @@ public class UsuarioController {
     @PutMapping("/id/{id}")
     public ResponseEntity<Usuario> updateUsuario(@PathVariable Integer id, @RequestBody Usuario usuario) {
         try {
-            ResponseEntity.ok(usuarioService.updateUsuario(id, usuario));
+            ResponseEntity.ok(usuarioService.updateUsuarioById(id, usuario));
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

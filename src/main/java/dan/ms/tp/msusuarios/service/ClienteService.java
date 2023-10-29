@@ -3,8 +3,6 @@ package dan.ms.tp.msusuarios.service;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-
 public interface ClienteService {
     List<Cliente> getAllClientes();
     Cliente getClienteById(Integer id);
