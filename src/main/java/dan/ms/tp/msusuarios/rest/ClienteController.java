@@ -1,6 +1,5 @@
 package dan.ms.tp.msusuarios.rest;
 
-import dan.ms.tp.msusuarios.dao.ClienteJpaRepository;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,53 +9,108 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import dan.ms.tp.msusuarios.service.ClienteService;
+
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
 
     @Autowired
-    private ClienteJpaRepository clienteRepository;
+    private ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> obtenerClientes() {
-        return clienteRepository.findAll();
+    public ResponseEntity<List<Cliente>> getAllClientes() {
+        try {
+            List<Cliente> clientes = clienteService.getAllClientes();
+            return ResponseEntity.ok(clientes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> obtenerClientePorId(@PathVariable Integer id) {
-        Optional<Cliente> cliente = clienteRepository.findById(id);
-        return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-
-    @GetMapping("/buscar")
-    public ResponseEntity<Cliente> obtenerClientePorCuit(@RequestParam String cuit) {
-        Optional<Cliente> cliente = clienteRepository.findByCuit(cuit);
-        return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
+        try {
+            Cliente cliente = clienteService.getClienteById(id);
+            if (cliente != null) {
+                return ResponseEntity.ok(cliente);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> crearCliente(@RequestBody Cliente nuevoCliente) {
-        Cliente clienteGuardado = clienteRepository.save(nuevoCliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteGuardado);
+    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
+        try {
+            Cliente createdCliente = clienteService.createCliente(cliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCliente);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> actualizarCliente(@PathVariable Integer id, @RequestBody Cliente clienteActualizado) {
-        if (!clienteRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Cliente> updateClienteById(@PathVariable Integer id, @RequestBody Cliente cliente) {
+        try {
+            Cliente updatedCliente = clienteService.updateClienteById(id, cliente);
+            if (updatedCliente != null) {
+                return ResponseEntity.ok(updatedCliente);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        clienteActualizado.setId(id);
-        Cliente clienteGuardado = clienteRepository.save(clienteActualizado);
-        return ResponseEntity.ok(clienteGuardado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable Integer id) {
-        if (!clienteRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteClienteById(@PathVariable Integer id) {
+        try {
+            clienteService.deleteClienteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        clienteRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/cuit/{cuit}")
+    public ResponseEntity<Cliente> getClienteByCuit(@PathVariable String cuit) {
+        try {
+            Cliente cliente = clienteService.getClienteByCuit(cuit);
+            if (cliente != null) {
+                return ResponseEntity.ok(cliente);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/cuit/{cuit}")
+    public ResponseEntity<Cliente> updateClienteByCuit(@PathVariable String cuit, @RequestBody Cliente cliente) {
+        try {
+            Cliente updatedCliente = clienteService.updateClienteByCuit(cuit, cliente);
+            if (updatedCliente != null) {
+                return ResponseEntity.ok(updatedCliente);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/cuit/{cuit}")
+    public ResponseEntity<Void> deleteClienteByCuit(@PathVariable String cuit) {
+        try {
+            clienteService.deleteClienteByCuit(cuit);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
