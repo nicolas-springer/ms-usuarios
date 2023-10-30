@@ -13,4 +13,6 @@ public interface UsuarioJpaRepository extends JpaRepository<Usuario,Integer>{
     @Query("SELECT COUNT(u) = 1 FROM Usuario u WHERE u.id_cliente = :idCliente AND u.id_tipo_usuario = 1")
     boolean existeUsuarioGerenteParaCliente(@Param("idCliente") Integer idCliente);
 
+    Usuario getUsuarioById(Integer id);
+
 }

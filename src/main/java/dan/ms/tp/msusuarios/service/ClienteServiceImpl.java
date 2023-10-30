@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dan.ms.tp.msusuarios.dao.ClienteJpaRepository;
+import dan.ms.tp.msusuarios.exception.ClienteNoEncontradoException;
 import dan.ms.tp.msusuarios.modelo.Cliente;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteServiceImpl implements ClienteService{
@@ -21,15 +21,16 @@ public class ClienteServiceImpl implements ClienteService{
         
     }
 
-   @Override
-    public Cliente getClienteById(Integer id) {
-        Optional<Cliente> optionalCliente = clienteJpaRepository.findById(id);
-        return optionalCliente.orElse(null);
+    @Override
+    public Cliente getClienteById(Integer id) throws ClienteNoEncontradoException{
+        return clienteJpaRepository.findById(id)
+            .orElseThrow(() -> new ClienteNoEncontradoException(id));
     }
 
     @Override
-    public Cliente getClienteByCuit(String cuit) {
-        return clienteJpaRepository.findByCuit(cuit).orElse(null);
+    public Cliente getClienteByCuit(String cuit) throws ClienteNoEncontradoException {
+        return clienteJpaRepository.findByCuit(cuit)
+            .orElseThrow(() -> new ClienteNoEncontradoException(cuit));
     }
 
     @Override
@@ -38,12 +39,15 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public Cliente updateClienteById(Integer id, Cliente cliente) {
-        if (clienteJpaRepository.existsById(id)) {
-            cliente.setId(id);
-            return clienteJpaRepository.save(cliente);
-        }
-        return null;
+    public Cliente updateClienteById(Integer id, Cliente clienteNuevo) throws ClienteNoEncontradoException {
+        Cliente clienteActualizar = getClienteById(id);
+        
+        clienteActualizar.setCorreoElectronico(clienteNuevo.getCorreoElectronico());
+        clienteActualizar.setHabilitadoOnline(clienteNuevo.getHabilitadoOnline());
+        clienteActualizar.setRazonSocial(clienteNuevo.getRazonSocial());
+        clienteActualizar.setMaximoCuentaCorriente(clienteNuevo.getMaximoCuentaCorriente());
+
+        return clienteActualizar;
     }
 
     @Override
@@ -54,17 +58,19 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public Cliente updateClienteByCuit(String cuit, Cliente cliente) {
-        Cliente existingCliente = getClienteByCuit(cuit);
-        if (existingCliente != null) {
-            cliente.setId(existingCliente.getId());
-            return clienteJpaRepository.save(cliente);
-        }
-        return null;
+    public Cliente updateClienteByCuit(String cuit, Cliente clienteNuevo) throws ClienteNoEncontradoException {
+        Cliente clienteActualizar = getClienteByCuit(cuit);
+        
+        clienteActualizar.setCorreoElectronico(clienteNuevo.getCorreoElectronico());
+        clienteActualizar.setHabilitadoOnline(clienteNuevo.getHabilitadoOnline());
+        clienteActualizar.setRazonSocial(clienteNuevo.getRazonSocial());
+        clienteActualizar.setMaximoCuentaCorriente(clienteNuevo.getMaximoCuentaCorriente());
+
+        return clienteActualizar;
     }
 
     @Override
-    public void deleteClienteByCuit(String cuit) {
+    public void deleteClienteByCuit(String cuit) throws ClienteNoEncontradoException {
         Cliente existingCliente = getClienteByCuit(cuit);
         if (existingCliente != null) {
             clienteJpaRepository.delete(existingCliente);
